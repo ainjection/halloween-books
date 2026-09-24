@@ -311,6 +311,19 @@ button.pill:hover{border-color:var(--glow)}
 .hand.up{transform:translateY(0) rotate(-8deg)}
 .fine{text-align:center;color:#6e6386;font-size:.8rem;padding:18px 16px 30px}
 
+.card .cw{position:relative}
+.card .cw .pk{position:absolute;left:50%;top:0;width:58px;margin-left:-29px;transform:translateY(12%);transition:transform .45s cubic-bezier(.34,1.8,.5,1);z-index:0;pointer-events:none}
+.card .cw > a{position:relative;z-index:1;display:block}
+.card:hover .cw .pk{transform:translateY(-64%) rotate(-8deg)}
+.card h3 a{text-decoration:none;color:inherit}
+.card .acts{display:flex;flex-wrap:wrap;gap:8px}
+.card .buy{text-decoration:none}
+.card .dl{font-size:.85rem;font-weight:800;color:var(--ink);border:1px solid rgba(185,169,214,.45);padding:7px 14px;border-radius:999px;text-decoration:none;transition:border-color .2s,color .2s}
+.card .dl:hover{border-color:var(--glow);color:var(--glow)}
+.card .dl:focus-visible,.card .buy:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+.cta.alt{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px rgba(238,241,255,.45);margin-left:10px}
+.cta.alt:hover{box-shadow:inset 0 0 0 2px var(--glow);color:var(--glow)}
+.frank,.vamp,.cat{pointer-events:auto}
 @media (max-width:980px){ .nav .links{display:none} }
 .pill{white-space:nowrap}
 @media (max-width:520px){ .hide-sm{display:none} .nav{gap:8px} }
@@ -348,7 +361,7 @@ button.pill:hover{border-color:var(--glow)}
     <path d="M86 206 Q96 222 92 236 M214 206 Q204 222 208 236" stroke="#6f7a5e" stroke-width="3" fill="none" opacity=".7"/>
   </svg>
   <div class="match"><div class="flame"></div><div class="stick"></div></div>
-  <div class="say">Lights out... click to skip</div>
+  <div class="say">Click to enter with sound... if you dare</div>
 </div>
 
 <nav class="nav" aria-label="Main">
@@ -480,7 +493,7 @@ button.pill:hover{border-color:var(--glow)}
     <div class="kicker">The Gentle Bookshop presents</div>
     <h1>The <span>Halloween</span> Shelf</h1>
     <p>Spooky, never scary. Colouring books, hidden-picture puzzles and big-print word searches for little monsters and grown-up ghouls.</p>
-    <a class="cta" href="#little">Open the spooky shelf</a>
+    <a class="cta" href="#little">Open the spooky shelf</a><a class="cta alt" href="#shelf">Print sample pages</a>
   </div>
 
   <div class="carousel-wrap" aria-label="Halloween books">
@@ -587,7 +600,7 @@ button.pill:hover{border-color:var(--glow)}
     <div class="ticks" id="ticks"></div>
   </section>
   <section class="chapter" style="padding-top:20px">
-    <div class="chapter-head"><div class="kicker">The whole spooky shelf</div><h2>Nine books. <em>One very good night.</em></h2></div>
+    <div class="chapter-head"><div class="kicker">The whole spooky shelf</div><h2>Nine books. <em>One very good night.</em></h2><p>Every book has five sample pages you can print at home. Try them first, then get the whole book on Amazon.</p></div>
     <div class="shelf" data-books="all"></div>
     <button class="hid" type="button" aria-label="A hidden ghost" style="right:8%;top:10px"></button>
   </section>
@@ -603,7 +616,7 @@ button.pill:hover{border-color:var(--glow)}
     <a class="stone" href="#hero"><span><small>Rise!</small>Back to the top of the lane</span></a>
   </div>
   <div class="dirt" aria-hidden="true"></div>
-  <p class="fine">The Halloween Shelf is part of The Gentle Bookshop. Book links go to Amazon.</p>
+  <p class="fine">The Halloween Shelf is part of The Gentle Bookshop. Book links go to Amazon. Sample pages are for personal use. Cat meow recording by Dan Crosby, CC BY-SA 3.0.</p>
 </footer>
 
 <div class="prize" id="prize" hidden>
@@ -714,7 +727,7 @@ button.pill:hover{border-color:var(--glow)}
       const flip = f.dir < 0 && !f.bat ? ' scaleX(-1)' : '';
       const tilt = f.bat ? '' : ` rotate(${Math.sin(t / 700 + f.ph) * 6}deg)`;
       f.el.style.transform = `translate(${f.x}px,${y}px)${tilt}${flip}`;
-      if (!f.bat) { const over = f.x + f.w > copyBox.left && f.x < copyBox.right && y + f.w * 1.2 > copyBox.top && y < copyBox.bottom; f.el.style.opacity = over ? .14 : f.op; }
+      if (!f.bat) { const over = f.x + f.w > copyBox.left && f.x < copyBox.right && y + f.w * 1.2 > copyBox.top && y < copyBox.bottom; f.el.style.opacity = over ? .14 : f.op; f.el.style.pointerEvents = over ? 'none' : 'auto'; }
       if (f.x < -f.w - 80 || f.x > hero.clientWidth + f.w + 200 || f.y < -120) { f.el.remove(); floaters.splice(i, 1); }
     }
   }
@@ -864,11 +877,25 @@ button.pill:hover{border-color:var(--glow)}
       clearInterval(hootTimer); if (on) { setTimeout(hoot, 1500); hootTimer = setInterval(hoot, 14000); }
       return on;
     }
-    return { toggle, hoot, whoosh, creak, pop };
+    return { toggle, hoot, whoosh, creak, pop, isOn: () => on };
   })();
   window.spook = Spook;
   const snd = $('#sound');
-  snd.addEventListener('click', () => { const on = Spook.toggle(); snd.setAttribute('aria-pressed', on); snd.querySelector('b').textContent = on ? 'on' : 'off'; });
+  let chose = false;
+  const setUI = on => { snd.setAttribute('aria-pressed', on); snd.querySelector('b').textContent = on ? 'on' : 'off'; };
+  snd.addEventListener('click', () => { chose = true; setUI(Spook.toggle()); });
+  const soundOn = () => { if (!Spook.isOn()) setUI(Spook.toggle()); };
+  addEventListener('pointerdown', e => { if (!chose && !e.target.closest('#sound')) soundOn(); }, { once: true });
+
+  // character voices, played on hover once sound is on
+  const SFX = { ghost: 'sounds/ghost.mp3', frank: 'sounds/frank.mp3', meow: 'sounds/meow.mp3', dracula: 'sounds/dracula.mp3' };
+  const lastPlayed = {};
+  function sfx(name, gap = 1500) {
+    if (!Spook.isOn()) return;
+    const now = performance.now(); if (now - (lastPlayed[name] || 0) < gap) return; lastPlayed[name] = now;
+    const a = new Audio(SFX[name]); a.volume = .85; a.play().catch(() => {});
+  }
+  window.sfx = sfx;
 
   // ---------- intro: strike a match, then open the scene ----------
   const intro = $('#intro'), h1 = $('.copy h1');
@@ -889,7 +916,7 @@ button.pill:hover{border-color:var(--glow)}
     setTimeout(() => { h1.classList.add('drop'); }, 500);
     setTimeout(() => intro.classList.add('gone'), 1400);
   }
-  if (reduce) { intro.classList.add('gone'); h1.classList.add('drop'); } else { intro.addEventListener('click', openScene); setTimeout(openScene, 3000); }
+  if (reduce) { intro.classList.add('gone'); h1.classList.add('drop'); } else { intro.addEventListener('click', () => { chose = true; soundOn(); openScene(); }); setTimeout(openScene, 3400); }
 
   // ---------- parallax ----------
   const hero = $('#hero');
@@ -914,7 +941,8 @@ button.pill:hover{border-color:var(--glow)}
   $$('.shelf').forEach(sh => {
     const list = sh.dataset.books === 'all' ? Object.keys(BOOKS) : sh.dataset.books.split(',');
     sh.innerHTML = list.map(slug => { const [asin, name, who] = BOOKS[slug];
-      return `<a class="card" href="https://www.amazon.com/dp/${asin}" target="_blank" rel="noopener"><div class="tilt"><img src="covers/${slug}.jpg" alt="${name} cover" loading="lazy"></div><h3>${name}</h3><span class="who">${who}</span><span class="buy">See it on Amazon</span></a>`; }).join('');
+      const amz = `https://www.amazon.com/dp/${asin}`;
+      return `<div class="card"><div class="cw"><div class="pk">${ghostSvg}</div><a href="${amz}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><div class="tilt"><img src="covers/${slug}.jpg" alt="" loading="lazy"></div></a></div><h3><a href="${amz}" target="_blank" rel="noopener">${name}</a></h3><span class="who">${who}</span><div class="acts"><a class="buy" href="${amz}" target="_blank" rel="noopener">See it on Amazon</a><a class="dl" href="pages/${slug}-sample-pages.pdf" download>Print 5 sample pages</a></div></div>`; }).join('');
   });
   if (!reduce) $$('.card').forEach(c => {
     const t = c.querySelector('.tilt');
@@ -989,6 +1017,13 @@ button.pill:hover{border-color:var(--glow)}
   }); });
   $('#prizeClose').addEventListener('click', () => $('#prize').hidden = true);
   addEventListener('keydown', e => { if (e.key === 'Escape') $('#prize').hidden = true; });
+
+  // ---------- hover sounds ----------
+  $('#frank').addEventListener('pointerenter', () => sfx('frank'));
+  $('#vamp').addEventListener('pointerenter', () => sfx('dracula', 2500));
+  $('.cat').addEventListener('pointerenter', () => sfx('meow', 900));
+  hero.addEventListener('pointerover', e => { if (e.target.closest('.sprite:not(.bat), .book, .jumper')) sfx('ghost', 1100); });
+  $$('.hid, .card').forEach(el => el.addEventListener('pointerenter', () => sfx('ghost', 1100)));
 
   // ---------- countdown ----------
   function tick() {
