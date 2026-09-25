@@ -368,7 +368,7 @@ button.pill:hover{border-color:var(--glow)}
   <a class="brand" href="#hero">The Halloween Shelf</a>
   <div class="links">
     <a href="#little">Little monsters</a>
-    <a href="#boldeasy">New: Bold &amp; Easy</a>
+    <a href="free-halloween-coloring-book.html">Free book</a>
     <a href="#mosaics">Mosaics</a>
     <a href="#words">Word search</a>
     <a href="#ghouls">Grown-up ghouls</a>
@@ -542,7 +542,8 @@ button.pill:hover{border-color:var(--glow)}
       <div class="chapter-head">
         <div class="kicker">New on the shelf, for kids, teens and adults</div>
         <h2>Colour it in. <em>Did you know?</em></h2>
-        <p>Fifty bold and easy designs: Dracula, Frankenstein, witches, mummies, a werewolf, the Headless Horseman and plenty of smiling pumpkins. Thick lines, big spaces, and a fun Halloween fact under every picture. Arriving on Amazon very soon; print five pages now and get started.</p>
+        <p>Fifty bold and easy designs: Dracula, Frankenstein, witches, mummies, a werewolf, the Headless Horseman and plenty of smiling pumpkins. Thick lines, big spaces, and a fun Halloween fact under every picture. And right now the whole 50-page book is free to download. No email, no catch, just print and colour.</p>
+        <p style="margin-top:18px"><a href="free-halloween-coloring-book.html" style="display:inline-block;background:var(--pumpkin);color:#1b1030;font-weight:900;padding:14px 24px;border-radius:999px;text-decoration:none">Get the free book &rarr;</a></p>
       </div>
     </div>
     <div class="shelf" data-books="halloween-bold-easy"></div>
@@ -962,13 +963,13 @@ button.pill:hover{border-color:var(--glow)}
     'halloween-grayscale-vol1': ['B0HGVBNKZS', 'Halloween Grayscale, Volume One', 'Adult colourists'],
     'halloween-grayscale-vol2': ['B0HGVLK1VQ', 'Halloween Grayscale, Volume Two', 'Adult colourists'],
     'halloween-grayscale-complete': ['B0HGVDWKP4', 'Halloween Grayscale: The Complete Collection', '100 pages, adult colourists'],
-    'halloween-bold-easy': ['', 'Halloween Bold and Easy Coloring Book', 'New: 50 designs, a fact with every one'],
+    'halloween-bold-easy': ['', 'Halloween Bold and Easy Coloring Book', 'Free: all 50 designs, a fact with every one'],
   };
   $$('.shelf').forEach(sh => {
     const list = sh.dataset.books === 'all' ? Object.keys(BOOKS) : sh.dataset.books.split(',');
     sh.innerHTML = list.map(slug => { const [asin, name, who] = BOOKS[slug];
-      const amz = asin ? `https://www.amazon.com/dp/${asin}` : '#boldeasy', tgt = asin ? ' target="_blank" rel="noopener"' : '';
-      return `<div class="card"><div class="cw"><div class="pk">${ghostSvg}</div><a href="${amz}"${tgt} tabindex="-1" aria-hidden="true"><div class="tilt"><img src="covers/${slug}.jpg" alt="" loading="lazy"></div></a></div><h3><a href="${amz}"${tgt}>${name}</a></h3><span class="who">${who}</span><div class="acts">${asin ? `<a class="buy" href="${amz}" target="_blank" rel="noopener">See it on Amazon</a>` : '<span class="buy" style="opacity:.75;cursor:default">Coming soon to Amazon</span>'}<a class="dl" href="pages/${slug}-sample-pages.pdf" download>Print 5 sample pages</a></div></div>`; }).join('');
+      const amz = asin ? `https://www.amazon.com/dp/${asin}` : 'free-halloween-coloring-book.html', tgt = asin ? ' target="_blank" rel="noopener"' : '';
+      return `<div class="card"><div class="cw"><div class="pk">${ghostSvg}</div><a href="${amz}"${tgt} tabindex="-1" aria-hidden="true"><div class="tilt"><img src="covers/${slug}.jpg" alt="" loading="lazy"></div></a></div><h3><a href="${amz}"${tgt}>${name}</a></h3><span class="who">${who}</span><div class="acts">${asin ? `<a class="buy" href="${amz}" target="_blank" rel="noopener">See it on Amazon</a>` : '<a class="buy" href="free-halloween-coloring-book.html">Download it free</a>'}${asin ? `<a class="dl" href="pages/${slug}-sample-pages.pdf" download>Print 5 sample pages</a>` : ''}</div></div>`; }).join('');
   });
   if (!reduce) $$('.card').forEach(c => {
     const t = c.querySelector('.tilt');

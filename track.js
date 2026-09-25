@@ -27,6 +27,9 @@
     if (!a || !a.href) return;
     if (a.href.indexOf('amazon.') !== -1) {
       send('amazon', (a.href.match(/\/dp\/([A-Z0-9]{10})/) || [])[1] || null);
+    } else if (a.dataset.free) {
+      /* full free downloads are logged as lookinside with a free: target */
+      send('lookinside', 'free:' + a.dataset.free);
     } else if (/\/pages\/.+-sample-pages\.pdf/.test(a.href)) {
       /* sample-page downloads are logged as lookinside with a sample: target */
       send('lookinside', 'sample:' + a.href.split('/pages/')[1].replace('-sample-pages.pdf', ''));
