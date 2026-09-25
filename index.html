@@ -368,11 +368,12 @@ button.pill:hover{border-color:var(--glow)}
   <a class="brand" href="#hero">The Halloween Shelf</a>
   <div class="links">
     <a href="#little">Little monsters</a>
+    <a href="#boldeasy">New: Bold &amp; Easy</a>
     <a href="#mosaics">Mosaics</a>
     <a href="#words">Word search</a>
     <a href="#ghouls">Grown-up ghouls</a>
   </div>
-  <span class="pill" title="Hidden ghosts found">Ghosts<span class="hide-sm"> found</span> <b id="gcount">0/5</b></span>
+  <span class="pill" title="Hidden ghosts found">Ghosts<span class="hide-sm"> found</span> <b id="gcount">0/6</b></span>
   <button class="pill" id="sound" type="button" aria-pressed="false">Sound <b>off</b></button>
 </nav>
 
@@ -527,6 +528,29 @@ button.pill:hover{border-color:var(--glow)}
 
   <div class="divider" aria-hidden="true"></div>
 
+  <!-- NEW: BOLD & EASY with a fact on every design -->
+  <section class="chapter" id="boldeasy">
+    <div class="split">
+      <div class="flipper" id="flipper2" style="aspect-ratio:1/1">
+        <img class="on" src="samples/be-1.jpg" alt="Bold and easy page: Count Dracula in front of his castle, with a fact box">
+        <img src="samples/be-2.jpg" alt="Bold and easy page: Frankenstein holding a flower, with a fact box">
+        <img src="samples/be-3.jpg" alt="Bold and easy page: a witch stirring her cauldron, with a fact box">
+        <img src="samples/be-4.jpg" alt="Bold and easy page: Dracula, Frankenstein, a mummy and a werewolf waving, with a fact box">
+        <img src="samples/be-5.jpg" alt="Bold and easy page: the Headless Horseman, with a fact box">
+        <div class="ctrl"><button class="round" data-dir="-1" type="button" aria-label="Previous page">&lsaquo;</button><span id="fliplbl2">Page 1 of 5</span><button class="round" data-dir="1" type="button" aria-label="Next page">&rsaquo;</button></div>
+      </div>
+      <div class="chapter-head">
+        <div class="kicker">New on the shelf, for kids, teens and adults</div>
+        <h2>Colour it in. <em>Did you know?</em></h2>
+        <p>Fifty bold and easy designs: Dracula, Frankenstein, witches, mummies, a werewolf, the Headless Horseman and plenty of smiling pumpkins. Thick lines, big spaces, and a fun Halloween fact under every picture. Arriving on Amazon very soon; print five pages now and get started.</p>
+      </div>
+    </div>
+    <div class="shelf" data-books="halloween-bold-easy"></div>
+    <button class="hid" type="button" aria-label="A hidden ghost" style="left:5%;top:40px"></button>
+  </section>
+
+  <div class="divider" aria-hidden="true"></div>
+
   <!-- MOSAICS: colour by number -->
   <section class="chapter" id="mosaics">
     <div class="split">
@@ -600,7 +624,7 @@ button.pill:hover{border-color:var(--glow)}
     <div class="ticks" id="ticks"></div>
   </section>
   <section class="chapter" style="padding-top:20px">
-    <div class="chapter-head"><div class="kicker">The whole spooky shelf</div><h2>Nine books. <em>One very good night.</em></h2><p>Every book has five sample pages you can print at home. Try them first, then get the whole book on Amazon.</p></div>
+    <div class="chapter-head"><div class="kicker">The whole spooky shelf</div><h2>Ten books. <em>One very good night.</em></h2><p>Every book has five sample pages you can print at home. Try them first, then get the whole book on Amazon.</p></div>
     <div class="shelf" data-books="all"></div>
     <button class="hid" type="button" aria-label="A hidden ghost" style="right:8%;top:10px"></button>
   </section>
@@ -621,7 +645,7 @@ button.pill:hover{border-color:var(--glow)}
 
 <div class="prize" id="prize" hidden>
   <div class="box" role="dialog" aria-modal="true" aria-labelledby="prizeT">
-    <h3 id="prizeT">You found all 5!</h3>
+    <h3 id="prizeT">You found all 6!</h3>
     <p>Sharp eyes. You'd be brilliant at Halloween Seek &amp; Find: fifty scenes, twelve hidden things on every page.</p>
     <a class="cta" href="https://www.amazon.com/dp/B0H7JDLNMW" target="_blank" rel="noopener">See the book</a>
     <p style="margin:16px 0 0"><button class="btn" id="prizeClose" type="button">Back to the lane</button></p>
@@ -648,13 +672,14 @@ button.pill:hover{border-color:var(--glow)}
     ['halloween-word-search-hard','B0HHXQ9NFH','Word Search: Hard'],
     ['halloween-mosaics-vol2','B0HKDD3VKC','Mystery Mosaics Vol. 2'],
     ['halloween-grayscale-vol2','B0HGVLK1VQ','Grayscale Vol. 2'],
+    ['halloween-bold-easy','','Bold & Easy (new)'],
   ];
   const ring = document.getElementById('ring');
   const n = books.length;
   const els = books.map(([slug, asin, name], i) => {
     const a = document.createElement('a');
-    a.className = 'book'; a.href = `https://www.amazon.com/dp/${asin}`; a.target = '_blank'; a.rel = 'noopener';
-    a.setAttribute('aria-label', `${name} on Amazon`);
+    a.className = 'book'; if (asin) { a.href = `https://www.amazon.com/dp/${asin}`; a.target = '_blank'; a.rel = 'noopener'; } else a.href = '#boldeasy';
+    a.setAttribute('aria-label', asin ? `${name} on Amazon` : `${name}, coming soon`);
     a.innerHTML = `<div class="peek">${ghost()}<span class="boo">Boo!</span></div><div class="cover"><img src="covers/${slug}.jpg" alt="${name} cover" loading="eager"></div><div class="label">${name}</div>`;
     ring.appendChild(a); return a;
   });
@@ -937,12 +962,13 @@ button.pill:hover{border-color:var(--glow)}
     'halloween-grayscale-vol1': ['B0HGVBNKZS', 'Halloween Grayscale, Volume One', 'Adult colourists'],
     'halloween-grayscale-vol2': ['B0HGVLK1VQ', 'Halloween Grayscale, Volume Two', 'Adult colourists'],
     'halloween-grayscale-complete': ['B0HGVDWKP4', 'Halloween Grayscale: The Complete Collection', '100 pages, adult colourists'],
+    'halloween-bold-easy': ['', 'Halloween Bold and Easy Coloring Book', 'New: 50 designs, a fact with every one'],
   };
   $$('.shelf').forEach(sh => {
     const list = sh.dataset.books === 'all' ? Object.keys(BOOKS) : sh.dataset.books.split(',');
     sh.innerHTML = list.map(slug => { const [asin, name, who] = BOOKS[slug];
-      const amz = `https://www.amazon.com/dp/${asin}`;
-      return `<div class="card"><div class="cw"><div class="pk">${ghostSvg}</div><a href="${amz}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><div class="tilt"><img src="covers/${slug}.jpg" alt="" loading="lazy"></div></a></div><h3><a href="${amz}" target="_blank" rel="noopener">${name}</a></h3><span class="who">${who}</span><div class="acts"><a class="buy" href="${amz}" target="_blank" rel="noopener">See it on Amazon</a><a class="dl" href="pages/${slug}-sample-pages.pdf" download>Print 5 sample pages</a></div></div>`; }).join('');
+      const amz = asin ? `https://www.amazon.com/dp/${asin}` : '#boldeasy', tgt = asin ? ' target="_blank" rel="noopener"' : '';
+      return `<div class="card"><div class="cw"><div class="pk">${ghostSvg}</div><a href="${amz}"${tgt} tabindex="-1" aria-hidden="true"><div class="tilt"><img src="covers/${slug}.jpg" alt="" loading="lazy"></div></a></div><h3><a href="${amz}"${tgt}>${name}</a></h3><span class="who">${who}</span><div class="acts">${asin ? `<a class="buy" href="${amz}" target="_blank" rel="noopener">See it on Amazon</a>` : '<span class="buy" style="opacity:.75;cursor:default">Coming soon to Amazon</span>'}<a class="dl" href="pages/${slug}-sample-pages.pdf" download>Print 5 sample pages</a></div></div>`; }).join('');
   });
   if (!reduce) $$('.card').forEach(c => {
     const t = c.querySelector('.tilt');
@@ -956,6 +982,12 @@ button.pill:hover{border-color:var(--glow)}
   $$('#flipper .round').forEach(b => b.addEventListener('click', () => {
     pages[pi].classList.remove('on'); pi = (pi + +b.dataset.dir + pages.length) % pages.length; pages[pi].classList.add('on');
     $('#fliplbl').textContent = `Page ${pi + 1} of ${pages.length}`; Spook.pop();
+  }));
+
+  const pages2 = $$('#flipper2 img'); let pi2 = 0;
+  $$('#flipper2 .round').forEach(b => b.addEventListener('click', () => {
+    pages2[pi2].classList.remove('on'); pi2 = (pi2 + +b.dataset.dir + pages2.length) % pages2.length; pages2[pi2].classList.add('on');
+    $('#fliplbl2').textContent = `Page ${pi2 + 1} of ${pages2.length}`; Spook.pop();
   }));
 
   // ---------- mystery mosaic ----------
