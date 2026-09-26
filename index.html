@@ -222,6 +222,18 @@ button.pill:hover{border-color:var(--glow)}
 .card:hover .buy{transform:translateY(-2px)}
 .card:focus-visible{outline:2px solid var(--glow);outline-offset:6px;border-radius:8px}
 
+/* seek & find game */
+.sf-layer{position:absolute;inset:0;z-index:3;transform:rotate(1.5deg);cursor:crosshair;touch-action:manipulation}
+.sf-layer svg{width:100%;height:100%;display:block}
+.sf-ring{fill:none;stroke:#39d98a;stroke-width:6}
+.sf-ring.sf-hint{stroke:var(--pumpkin);stroke-dasharray:10 8;animation:sfpulse 1s ease-in-out infinite alternate}
+.sf-ring.miss{stroke:#ff4d6d;stroke-width:4;animation:sffade .6s forwards}
+.sf-tick{fill:#39d98a;opacity:.85}
+@keyframes sfpulse{from{stroke-width:5;opacity:.6}to{stroke-width:9;opacity:1}}
+@keyframes sffade{to{opacity:0}}
+.sf-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px}
+.sf-bar .pill b{color:var(--glow)}
+.sf-help{font-size:.9rem;color:var(--muted);margin-top:8px}
 /* page flipper (seek & find) */
 .flipper{position:relative;aspect-ratio:760/983;max-width:460px;justify-self:center;width:100%}
 .flipper img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;border-radius:8px;background:#fff;box-shadow:0 30px 60px rgba(0,0,0,.6);
@@ -514,11 +526,15 @@ button.pill:hover{border-color:var(--glow)}
         <div class="kicker">For little monsters, ages 4 to 8</div>
         <h2>Can you find <em>all 12?</em></h2>
         <p>Fifty busy Halloween scenes, each hiding twelve little things to spot, from a trick-or-treat street to a ghost ship and a skeleton dance party. Find them, tick them off, then colour the whole page in. Friendly, never frightening.</p>
+        <div class="sf-bar"><span class="pill">Found <b id="sfcount">0/12</b></span><button class="round" id="sfreset" type="button" aria-label="Start this page again" title="Start again">&#8635;</button></div>
+        <p class="sf-help">Play it here: tap the picture when you spot something. Stuck? Tap an object in the bottom row and it will light up where it hides.</p>
+        <div class="status" id="sfstatus" role="status"></div>
       </div>
       <div class="flipper" id="flipper">
         <img class="on" src="samples/sf-street.jpg" alt="Seek and find page: Spooky Street Trick-or-Treat">
         <img src="samples/sf-hallway.jpg" alt="Seek and find page: Haunted House Hallway">
         <img src="samples/sf-ship.jpg" alt="Seek and find page: Ghost Ship Deck">
+        <div class="sf-layer" id="sfLayer"><svg viewBox="0 0 760 984" id="sfSvg" aria-label="Tap to find the hidden objects"></svg></div>
         <div class="ctrl"><button class="round" data-dir="-1" type="button" aria-label="Previous page">&lsaquo;</button><span id="fliplbl">Page 1 of 3</span><button class="round" data-dir="1" type="button" aria-label="Next page">&rsaquo;</button></div>
       </div>
     </div>
@@ -982,8 +998,40 @@ button.pill:hover{border-color:var(--glow)}
   const pages = $$('#flipper img'); let pi = 0;
   $$('#flipper .round').forEach(b => b.addEventListener('click', () => {
     pages[pi].classList.remove('on'); pi = (pi + +b.dataset.dir + pages.length) % pages.length; pages[pi].classList.add('on');
-    $('#fliplbl').textContent = `Page ${pi + 1} of ${pages.length}`; Spook.pop();
+    $('#fliplbl').textContent = `Page ${pi + 1} of ${pages.length}`; Spook.pop(); sfRender();
   }));
+  // ---------- seek & find game: tap to find, tap the legend for a hint ----------
+  const SF = {"sf-street": [["Black cat", [[148, 687]]], ["Bat", [[558, 222], [119, 205], [200, 193], [245, 260], [353, 213], [353, 277], [433, 177], [410, 240]]], ["Spider", [[637, 437], [155, 380], [85, 497]]], ["Candy corn", [[45, 437], [715, 437]]], ["Witch hat", [[210, 663], [313, 703], [472, 572], [520, 572]]], ["Broomstick", [[267, 773], [630, 677]]], ["Skull", [[333, 498], [652, 703]]], ["Candle", [[668, 643]]], ["Friendly ghost", [[580, 357], [563, 303], [461, 307], [207, 303]]], ["Lollipop", [[537, 713]]], ["Owl", [[642, 220], [343, 403]]], ["Key", [[485, 408]]]], "sf-hallway": [["Mouse", [[87, 720], [192, 725]]], ["Spider", [[93, 237], [275, 223], [625, 267], [670, 228], [148, 557], [380, 408]]], ["Bat", [[360, 330], [400, 330]]], ["Candle", [[183, 457], [317, 263], [338, 240], [415, 240], [437, 263], [503, 500]]], ["Key", [[452, 362]]], ["Top hat", [[688, 317]]], ["Clock", [[437, 472], [300, 810]]], ["Cobweb", [[553, 673]]], ["Rat", [[192, 725], [87, 720]]], ["Teacup", [[660, 443]]], ["Picture frame", [[90, 340], [152, 310], [153, 387], [573, 267], [567, 360], [623, 393], [683, 330]]], ["Slipper", [[667, 753], [663, 822]]]], "sf-ship": [["Parrot", [[285, 300], [140, 582]]], ["Treasure chest", [[165, 675]]], ["Anchor", [[608, 640], [580, 800]]], ["Compass", [[540, 625]]], ["Rope", [[105, 790], [575, 240]]], ["Barrel", [[600, 800], [680, 760], [285, 485], [460, 490], [437, 433]]], ["Telescope", [[557, 407]]], ["Coin", [[215, 735]]], ["Starfish", [[225, 235], [95, 270], [300, 655]]], ["Fish", [[110, 210], [660, 210], [190, 390], [610, 540]]], ["Pirate hat", [[383, 453], [580, 387]]], ["Key", [[462, 583]]]]}, SFLEG = {"sf-street": [850, 925, 68, 692], "sf-hallway": [862, 935, 66, 700], "sf-ship": [858, 935, 60, 700]};
+  const sfState = {};
+  const sfSvg = $('#sfSvg'), NS = 'http://www.w3.org/2000/svg';
+  const sfKey = () => pages[pi].getAttribute('src').split('/').pop().replace('.jpg', '');
+  function sfPage() { const k = sfKey(); return sfState[k] || (sfState[k] = { found: new Set(), used: new Set(), hint: null }); }
+  function ring(x, y, r, cls) { const c = document.createElementNS(NS, 'circle'); c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', r); c.setAttribute('class', cls); sfSvg.appendChild(c); return c; }
+  function sfRender() {
+    const k = sfKey(), st = sfPage(), items = SF[k], [y0, y1, x0, x1] = SFLEG[k], cw = (x1 - x0) / 12;
+    sfSvg.innerHTML = '';
+    st.marks && st.marks.forEach(([x, y]) => ring(x, y, 30, 'sf-ring'));
+    st.found.forEach(i => { const r = document.createElementNS(NS, 'rect'); r.setAttribute('x', x0 + i * cw + 4); r.setAttribute('y', y0); r.setAttribute('width', cw - 8); r.setAttribute('height', y1 - y0); r.setAttribute('rx', 10); r.setAttribute('class', 'sf-tick'); r.style.opacity = .28; sfSvg.appendChild(r); });
+    if (st.hint != null) items[st.hint][1].forEach(([x, y]) => ring(x, y, 34, 'sf-ring sf-hint'));
+    $('#sfcount').textContent = `${st.found.size}/12`;
+    $('#sfstatus').textContent = st.found.size === 12 ? 'All 12 found! Try the next page.' : '';
+  }
+  sfSvg.addEventListener('click', e => {
+    const pt = sfSvg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; const p = pt.matrixTransform(sfSvg.getScreenCTM().inverse());
+    const k = sfKey(), st = sfPage(), items = SF[k], [y0, y1, x0, x1] = SFLEG[k];
+    if (p.y >= y0 - 10 && p.y <= y1 + 25 && p.x >= x0 && p.x <= x1) {       // legend tapped: show where it hides
+      const i = Math.min(11, Math.floor((p.x - x0) / ((x1 - x0) / 12))); st.hint = st.hint === i ? null : i; sfRender(); Spook.pop();
+      $('#sfstatus').textContent = st.found.has(i) ? `You already found the ${items[i][0].toLowerCase()}!` : `Look for the glowing circle: the ${items[i][0].toLowerCase()}.`; return; }
+    let best = null;
+    items.forEach(([name, pts], i) => { if (st.found.has(i)) return; pts.forEach(([x, y]) => { const key = x + ',' + y; if (st.used.has(key)) return;
+      const d = Math.hypot(p.x - x, p.y - y); if (d < 48 && (!best || d < best.d)) best = { i, x, y, d, key }; }); });
+    if (best) { st.found.add(best.i); st.used.add(best.key); (st.marks = st.marks || []).push([best.x, best.y]); if (st.hint === best.i) st.hint = null; sfRender(); Spook.pop();
+      $('#sfstatus').textContent = st.found.size === 12 ? 'All 12 found! Try the next page.' : `Found the ${items[best.i][0].toLowerCase()}!`; if (st.found.size === 12) sfx('ghost', 0);
+    } else { const m = ring(p.x, p.y, 22, 'sf-ring miss'); setTimeout(() => m.remove(), 650); }
+  });
+  $('#sfreset').addEventListener('click', () => { delete sfState[sfKey()]; sfRender(); Spook.pop(); });
+  sfRender();
+
 
   const pages2 = $$('#flipper2 img'); let pi2 = 0;
   $$('#flipper2 .round').forEach(b => b.addEventListener('click', () => {
