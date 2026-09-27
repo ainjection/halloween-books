@@ -641,7 +641,7 @@ button.pill:hover{border-color:var(--glow)}
       <img src="samples/gs-dance.jpg" alt="Skeleton ballroom dance page" loading="lazy">
       <img src="samples/gs-witch.jpg" alt="Witch on a broomstick page" loading="lazy">
     </div>
-    <div class="shelf" data-books="halloween-grayscale-vol1,halloween-grayscale-vol2,halloween-grayscale-complete"></div>
+    <div class="shelf" data-books="halloween-grayscale-vol1,halloween-grayscale-vol2,halloween-grayscale-complete,halloween-pocket-sudoku"></div>
     <button class="hid" type="button" aria-label="A hidden ghost" style="left:45%;top:60px"></button>
   </section>
 
@@ -652,7 +652,7 @@ button.pill:hover{border-color:var(--glow)}
     <div class="ticks" id="ticks"></div>
   </section>
   <section class="chapter" style="padding-top:20px">
-    <div class="chapter-head"><div class="kicker">The whole spooky shelf</div><h2>Ten books. <em>One very good night.</em></h2><p>Every book has five sample pages you can print at home. Try them first, then get the whole book on Amazon. <a href="halloween-coloring-pages-printable.html" style="color:var(--glow);font-weight:800">See all the printable Halloween pages in one place</a>.</p></div>
+    <div class="chapter-head"><div class="kicker">The whole spooky shelf</div><h2>Eleven books. <em>One very good night.</em></h2><p>Every book has five sample pages you can print at home. Try them first, then get the whole book on Amazon. <a href="halloween-coloring-pages-printable.html" style="color:var(--glow);font-weight:800">See all the printable Halloween pages in one place</a>.</p></div>
     <div class="shelf" data-books="all"></div>
     <button class="hid" type="button" aria-label="A hidden ghost" style="right:8%;top:10px"></button>
   </section>
@@ -701,6 +701,7 @@ button.pill:hover{border-color:var(--glow)}
     ['halloween-mosaics-vol2','B0HKDD3VKC','Mystery Mosaics Vol. 2'],
     ['halloween-grayscale-vol2','B0HGVLK1VQ','Grayscale Vol. 2'],
     ['halloween-bold-easy','','Bold & Easy (new)'],
+    ['halloween-pocket-sudoku','B0HL6G178R','Pocket Sudoku (new)'],
   ];
   const ring = document.getElementById('ring');
   const n = books.length;
@@ -991,6 +992,7 @@ button.pill:hover{border-color:var(--glow)}
     'halloween-grayscale-vol2': ['B0HGVLK1VQ', 'Halloween Grayscale, Volume Two', 'Adult colourists'],
     'halloween-grayscale-complete': ['B0HGVDWKP4', 'Halloween Grayscale: The Complete Collection', '100 pages, adult colourists'],
     'halloween-bold-easy': ['', 'Halloween Bold and Easy Coloring Book', 'Free: all 50 designs, a fact with every one'],
+    'halloween-pocket-sudoku': ['B0HL6G178R', 'Pocket Sudoku & Grayscale Coloring: Halloween Edition', 'New: 100 puzzles, each facing a picture to color'],
   };
   $$('.shelf').forEach(sh => {
     const list = sh.dataset.books === 'all' ? Object.keys(BOOKS) : sh.dataset.books.split(',');
