@@ -373,6 +373,9 @@ button.pill:hover{border-color:var(--glow)}
 .game-card h2{font-family:var(--display);font-weight:400;color:var(--glow);font-size:clamp(28px,4vw,40px);margin:4px 0 6px}
 .game-card p{color:var(--muted);margin:0 0 14px;line-height:1.5}
 @media (max-width:600px){ .game-card{flex-direction:column;text-align:center} }
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.cta-row .cta{margin:0 !important}
+.hero .copy h1{overflow-wrap:normal !important;word-break:normal !important;hyphens:none}
 </style>
 </head>
 <body>
@@ -531,7 +534,7 @@ button.pill:hover{border-color:var(--glow)}
     <div class="kicker">The Gentle Bookshop presents</div>
     <h1>The <span>Halloween</span> Shelf</h1>
     <p>Spooky, never scary. Colouring books, hidden-picture puzzles and big-print word searches for little monsters and grown-up ghouls.</p>
-    <a class="cta" href="#little">Open the spooky shelf</a><a class="cta alt" href="#shelf">Print sample pages</a><a class="cta game-cta" href="game/?src=shelf-hero">Play our Halloween game</a>
+    <div class="cta-row"><a class="cta" href="#little">Open the spooky shelf</a><a class="cta alt" href="#shelf">Print sample pages</a><a class="cta game-cta" href="game/?src=shelf-hero">Play our Halloween game</a></div>
   </div>
 
   <div class="carousel-wrap" aria-label="Halloween books">
@@ -986,7 +989,13 @@ button.pill:hover{border-color:var(--glow)}
     [...node.childNodes].forEach(n => {
       if (n.nodeType === 3) {
         const frag = document.createDocumentFragment();
-        [...n.textContent].forEach(ch => { if (ch === ' ') { frag.append(' '); return; } const s = document.createElement('span'); s.className = 'ltr'; s.textContent = ch; frag.append(s); });
+        n.textContent.split(/( +)/).forEach(part => {   // letters grouped per word so the title never breaks mid-word
+          if (!part) return;
+          if (/^ +$/.test(part)) { frag.append(' '); return; }
+          const w = document.createElement('span'); w.className = 'word'; w.style.whiteSpace = 'nowrap'; w.style.display = 'inline-block';
+          [...part].forEach(ch => { const s = document.createElement('span'); s.className = 'ltr'; s.textContent = ch; w.append(s); });
+          frag.append(w);
+        });
         n.replaceWith(frag);
       } else splitLetters(n);
     });
