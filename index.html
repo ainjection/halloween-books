@@ -359,6 +359,20 @@ button.pill:hover{border-color:var(--glow)}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
 }
+
+/* game link (30 Sep) */
+.nav .play-pill{text-decoration:none;background:var(--pumpkin);color:#1b0c00;font-weight:900}
+.cta.game-cta{margin-left:10px;background:linear-gradient(180deg,#ffb347,#ff7a1a)}
+@media (max-width:520px){ .cta.game-cta{margin-left:0;margin-top:10px} }
+.game-band{padding:28px clamp(16px,4vw,48px)}
+.game-card{display:flex;gap:22px;align-items:center;max-width:900px;margin:0 auto;padding:22px 26px;border-radius:24px;text-decoration:none;color:var(--ink);
+  background:linear-gradient(135deg,rgba(59,31,85,.95),rgba(34,19,58,.95));border:2px solid rgba(255,179,71,.5);box-shadow:0 18px 50px rgba(0,0,0,.45);transition:transform .2s}
+.game-card:hover{transform:translateY(-3px)}
+.game-card img{width:130px;height:130px;object-fit:contain;flex:none;animation:boobob 1.8s ease-in-out infinite}
+@keyframes boobob{50%{transform:translateY(-10px)}}
+.game-card h2{font-family:var(--display);font-weight:400;color:var(--glow);font-size:clamp(28px,4vw,40px);margin:4px 0 6px}
+.game-card p{color:var(--muted);margin:0 0 14px;line-height:1.5}
+@media (max-width:600px){ .game-card{flex-direction:column;text-align:center} }
 </style>
 </head>
 <body>
@@ -388,12 +402,14 @@ button.pill:hover{border-color:var(--glow)}
 <nav class="nav" aria-label="Main">
   <a class="brand" href="#hero">The Halloween Shelf</a>
   <div class="links">
+    <a href="game/?src=shelf-menu" style="color:var(--glow)">Play the game</a>
     <a href="#little">Little monsters</a>
     <a href="free-halloween-coloring-book.html">Free book</a>
     <a href="#mosaics">Mosaics</a>
     <a href="#words">Word search</a>
     <a href="#ghouls">Grown-up ghouls</a>
   </div>
+  <a class="pill play-pill" href="game/?src=shelf-pill" title="Play Boo's Candy Flight">Play<span class="hide-sm"> game</span></a>
   <span class="pill" title="Hidden ghosts found">Ghosts<span class="hide-sm"> found</span> <b id="gcount">0/6</b></span>
   <button class="pill" id="sound" type="button" aria-pressed="false">Sound <b>off</b></button>
 </nav>
@@ -515,7 +531,7 @@ button.pill:hover{border-color:var(--glow)}
     <div class="kicker">The Gentle Bookshop presents</div>
     <h1>The <span>Halloween</span> Shelf</h1>
     <p>Spooky, never scary. Colouring books, hidden-picture puzzles and big-print word searches for little monsters and grown-up ghouls.</p>
-    <a class="cta" href="#little">Open the spooky shelf</a><a class="cta alt" href="#shelf">Print sample pages</a>
+    <a class="cta" href="#little">Open the spooky shelf</a><a class="cta alt" href="#shelf">Print sample pages</a><a class="cta game-cta" href="game/?src=shelf-hero">Play our Halloween game</a>
   </div>
 
   <div class="carousel-wrap" aria-label="Halloween books">
@@ -524,6 +540,19 @@ button.pill:hover{border-color:var(--glow)}
 
   <div class="jumper" id="jumper" aria-hidden="true"><span class="say">Boo!</span></div>
   <div class="hint">Hover a book. Something might be hiding behind it...</div>
+</section>
+
+<!-- ================= GAME ================= -->
+<section class="game-band" id="game" aria-label="Boo's Candy Flight game">
+  <a class="game-card" href="game/?src=shelf-panel">
+    <img src="game/assets/ghost.png" alt="Boo the little ghost" loading="lazy" />
+    <div>
+      <div class="kicker">New: play our Halloween game</div>
+      <h2>Boo's Candy Flight</h2>
+      <p>Tap to float Boo through the spooky town. Slip past the chimneys and trees, dodge the bats, grab the candy. How far can you fly?</p>
+      <span class="cta">Play now</span>
+    </div>
+  </a>
 </section>
 
 <main class="lane" id="books">
