@@ -3,7 +3,7 @@
 (function () {
   var ENDPOINT = 'https://kvjientfaaewancbmzrr.supabase.co/rest/v1/events';
   var KEY = 'sb_publishable_AISP1QyNwBJJFrKDZNjIAA_zYdxWnFQ';
-  var book = 'halloween-shelf';
+  var book = (document.body && document.body.getAttribute('data-book')) || 'halloween-shelf';
   /* Social in-app browsers strip document.referrer, so a ?src= tag on posted links is the reliable signal. */
   var ref = '';
   try {
