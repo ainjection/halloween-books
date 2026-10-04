@@ -701,13 +701,13 @@ button.pill:hover{border-color:var(--glow)}
   </div>
   <div class="dirt" aria-hidden="true"></div>
   <p class="fine">The Halloween Shelf is part of The Gentle Bookshop. Book links go to Amazon. Sample pages are for personal use. Cat meow recording by Dan Crosby, CC BY-SA 3.0.</p>
-</footer>
+<p class="amzn-disclosure" style="font-size:12px;opacity:.7;margin:18px 0 0">As an Amazon Associate I earn from qualifying purchases.</p></footer>
 
 <div class="prize" id="prize" hidden>
   <div class="box" role="dialog" aria-modal="true" aria-labelledby="prizeT">
     <h3 id="prizeT">You found all 6!</h3>
     <p>Sharp eyes. You'd be brilliant at Halloween Seek &amp; Find: fifty scenes, twelve hidden things on every page.</p>
-    <a class="cta" href="https://www.amazon.com/dp/B0H7JDLNMW" target="_blank" rel="noopener">See the book</a>
+    <a class="cta" href="https://www.amazon.com/dp/B0H7JDLNMW?tag=gentlebooksho-20" target="_blank" rel="noopener">See the book</a>
     <p style="margin:16px 0 0"><button class="btn" id="prizeClose" type="button">Back to the lane</button></p>
   </div>
 </div>
@@ -739,7 +739,7 @@ button.pill:hover{border-color:var(--glow)}
   const n = books.length;
   const els = books.map(([slug, asin, name], i) => {
     const a = document.createElement('a');
-    a.className = 'book'; if (asin) { a.href = `https://www.amazon.com/dp/${asin}`; a.target = '_blank'; a.rel = 'noopener'; } else a.href = '#boldeasy';
+    a.className = 'book'; if (asin) { a.href = `https://www.amazon.com/dp/${asin}?tag=gentlebooksho-20`; a.target = '_blank'; a.rel = 'noopener'; } else a.href = '#boldeasy';
     a.setAttribute('aria-label', asin ? `${name} on Amazon` : `${name}, coming soon`);
     a.innerHTML = `<div class="peek">${ghost()}<span class="boo">Boo!</span></div><div class="cover"><img src="covers/${slug}.jpg" alt="${name} cover" loading="eager"></div><div class="label">${name}</div>`;
     ring.appendChild(a); return a;
@@ -1035,7 +1035,7 @@ button.pill:hover{border-color:var(--glow)}
   $$('.shelf').forEach(sh => {
     const list = sh.dataset.books === 'all' ? Object.keys(BOOKS) : sh.dataset.books.split(',');
     sh.innerHTML = list.map(slug => { const [asin, name, who] = BOOKS[slug];
-      const amz = asin ? `https://www.amazon.com/dp/${asin}` : 'free-halloween-coloring-book.html', tgt = asin ? ' target="_blank" rel="noopener"' : '';
+      const amz = asin ? `https://www.amazon.com/dp/${asin}?tag=gentlebooksho-20` : 'free-halloween-coloring-book.html', tgt = asin ? ' target="_blank" rel="noopener"' : '';
       return `<div class="card"><div class="cw"><div class="pk">${ghostSvg}</div><a href="${amz}"${tgt} tabindex="-1" aria-hidden="true"><div class="tilt"><img src="covers/${slug}.jpg" alt="" loading="lazy"></div></a></div><h3><a href="${amz}"${tgt}>${name}</a></h3><span class="who">${who}</span><div class="acts">${asin ? `<a class="buy" href="${amz}" target="_blank" rel="noopener">See it on Amazon</a>` : '<a class="buy" href="free-halloween-coloring-book.html">Download it free</a>'}${asin ? `<a class="dl" href="pages/${slug}-sample-pages.pdf" download>Print 5 sample pages</a>` : ''}</div></div>`; }).join('');
   });
   if (!reduce) $$('.card').forEach(c => {

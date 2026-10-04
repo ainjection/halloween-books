@@ -92,7 +92,7 @@ p b { color:var(--ink); }
     for (let i = 0; i < 3; i++) {
       const [asin, cover, name] = BOOKS[(bookOffset + i) % BOOKS.length];
       const a = document.createElement('a');
-      a.href = `https://www.amazon.com/dp/${asin}`; a.target = '_blank'; a.rel = 'noopener';
+      a.href = `https://www.amazon.com/dp/${asin}?tag=gentlebooksho-20`; a.target = '_blank'; a.rel = 'noopener';
       a.innerHTML = `<img src="../covers/${cover}" alt="${name} cover" loading="lazy" />${name}`;
       a.addEventListener('click', () => { try { window.__track && window.__track('game-book-click'); } catch (e) {} });
       el.appendChild(a);
