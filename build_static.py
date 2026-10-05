@@ -89,7 +89,7 @@ def jsonld(books):
             {"@type": "ListItem", "position": 2, "name": "The Halloween Shelf", "item": SHELF}]},
         {"@type": "Organization", "@id": SITE + "/#org", "name": "The Gentle Bookshop", "url": SITE + "/",
          "logo": {"@type": "ImageObject", "url": SITE + "/gentle-bookshop/logo-512.png", "width": 512, "height": 512},
-         "sameAs": ["https://www.youtube.com/@TheGentleBookshop", "https://www.tiktok.com/@tgbookshop"]},
+         "sameAs": ["https://www.youtube.com/@TheGentleBookshop", "https://www.tiktok.com/@tgbookshop", "https://www.pinterest.com/digitalexpress77/"]},
         {"@type": "ItemList", "@id": SHELF + "#shelf", "name": "The Halloween Shelf", "numberOfItems": len(items), "itemListElement": items},
     ]
     return '<script type="application/ld+json">' + json.dumps({"@context": "https://schema.org", "@graph": graph}, separators=(",", ":")) + "</script>"
